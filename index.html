@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tarifario de la comarca 2026 — Aranceles de referencia</title>
+<meta name="description" content="Aranceles orientativos para presupuestar y cobrar trabajos profesionales. Referencia por tipo de cliente.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#ffffff;
+  --paper-2:#f4f5f7;
+  --rule:#e2e5e9;
+  --rule-mid:#bcc2ca;
+  --rule-strong:#c9cdd4;
+  --ink:#15181c;
+  --ink-80:#43484f;
+  --bar:#43484f;
+  --bar-ink:#e2e5e9;
+  --ink-soft:#6a7280;
+  --navy:#132b4d;
+  --navy-2:#1e4079;
+  --navy-wash:#eef2f8;
+
+  --sp: clamp(1.25rem, 4vw, 2.5rem);
+  --maxw: 1080px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Archivo',system-ui,sans-serif;
+  font-size:16px;
+  line-height:1.42;
+  font-variant-numeric:tabular-nums;
+}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--sp)}
+a{color:var(--navy-2);text-decoration:none}
+a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--navy-2);outline-offset:3px;border-radius:2px}
+
+/* ---------- header ---------- */
+.top{
+  position:sticky;top:0;z-index:40;
+  background:var(--bar);
+  color:var(--bar-ink);
+  border-bottom:1px solid var(--bar);
+}
+.top-in{
+  display:flex;align-items:center;gap:1rem;
+  min-height:60px;
+}
+.mark{
+  font-weight:800;letter-spacing:-.045em;font-size:1.15rem;
+  display:flex;align-items:baseline;gap:.3em;white-space:nowrap;
+  color:var(--bar-ink);
+}
+.mark span{font-weight:300;letter-spacing:-.02em}
+.mark span.year{color:rgba(226,229,233,.6)}
+.top nav{margin-left:auto;display:flex;gap:1.25rem;font-size:.85rem}
+.top nav a{color:rgba(226,229,233,.72)}
+.top nav a:hover{color:#fff}
+.top :focus-visible{outline-color:var(--bar-ink)}
+
+/* ---------- hero ---------- */
+.hero{padding:clamp(3rem,9vw,6rem) 0 2.5rem;border-bottom:1px solid var(--rule)}
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;font-size:.72rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--navy-2);margin-bottom:1.4rem;
+  display:flex;align-items:center;gap:.6rem;
+}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--rule);max-width:180px}
+h1{
+  font-size:clamp(2.4rem,7vw,4.4rem);
+  font-weight:800;letter-spacing:-.045em;line-height:.98;
+  max-width:16ch;
+}
+h1 em{font-style:normal;color:var(--navy)}
+.lede{
+  margin-top:1.4rem;max-width:52ch;color:var(--ink-soft);
+  font-size:clamp(1rem,1.6vw,1.1rem);line-height:1.5;
+}
+.meta{
+  margin-top:2.2rem;display:flex;flex-wrap:wrap;gap:2rem;
+  font-family:'IBM Plex Mono',monospace;font-size:.75rem;color:var(--ink-soft);
+}
+.meta b{display:block;font-family:'Archivo';font-weight:600;font-size:1.5rem;color:var(--ink);letter-spacing:-.02em}
+
+/* ---------- panel de control ---------- */
+.controls{
+  position:sticky;top:60px;z-index:30;
+  background:var(--paper-2);
+  border-bottom:1px solid var(--rule);
+}
+.controls-in{
+  display:flex;flex-wrap:wrap;gap:1rem 1.5rem;align-items:flex-end;
+  padding-top:1rem;padding-bottom:1rem;
+}
+.field{display:flex;flex-direction:column;gap:.4rem}
+.field > label{
+  font-family:'IBM Plex Mono',monospace;font-size:.66rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-soft);
+}
+.seg{display:flex;border:1px solid var(--rule-strong);border-radius:3px;overflow:hidden;background:#fff}
+.seg button{
+  font:inherit;font-size:.85rem;font-weight:500;
+  background:transparent;border:0;cursor:pointer;color:var(--ink-soft);
+  padding:.5rem .9rem;border-right:1px solid var(--rule);
+  transition:background .15s,color .15s;
+}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--navy);color:#fff}
+.seg button:hover:not([aria-pressed="true"]){background:var(--navy-wash);color:var(--navy)}
+
+input[type="search"],input[type="number"]{
+  font:inherit;font-size:.9rem;background:#fff;
+  border:1px solid var(--rule-strong);border-radius:3px;
+  padding:.5rem .7rem;color:var(--ink);
+}
+input[type="search"]{min-width:min(280px,60vw)}
+input[type="number"]{width:96px;font-family:'IBM Plex Mono',monospace}
+.hint{font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--ink-soft);margin-left:auto;max-width:26ch;text-align:right}
+
+/* ---------- listado ---------- */
+main{padding-bottom:5rem}
+.cat{padding-top:clamp(3rem,6vw,5rem)}
+.cat > h2{
+  font-size:clamp(1.5rem,3.4vw,2.15rem);font-weight:800;
+  letter-spacing:-.025em;text-transform:uppercase;color:var(--ink-80);
+  line-height:1.05;padding-bottom:.55rem;border-bottom:2px solid var(--navy);
+  display:block;
+}
+
+.thead{
+  display:grid;grid-template-columns:1fr repeat(3,92px);gap:1rem;
+  padding:.55rem 0;border-bottom:1px solid var(--rule-mid);
+  font-family:'IBM Plex Mono',monospace;font-size:.66rem;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);
+  align-items:center;
+}
+.thead i{font-style:normal;text-align:right}
+.thead i.sel{color:var(--navy)}
+
+.row{
+  display:grid;grid-template-columns:1fr repeat(3,92px);gap:1rem;
+  align-items:baseline;padding:.9rem 0;
+  border-bottom:1px solid var(--rule-mid);
+  position:relative;
+}
+.row::before{
+  content:"";position:absolute;left:-12px;top:.9rem;bottom:.9rem;width:2px;
+  background:var(--navy);transform:scaleY(0);transform-origin:top;
+  transition:transform .18s ease;
+}
+.row:hover::before{transform:scaleY(1)}
+.row .name{font-weight:500;letter-spacing:-.01em}
+.row .name small{display:block;font-weight:400;font-size:.8rem;color:var(--ink-soft);letter-spacing:0;line-height:1.35;margin-top:.12rem}
+.row .val{
+  font-family:'IBM Plex Mono',monospace;font-size:.9rem;text-align:right;
+  color:var(--ink-soft);transition:color .15s,opacity .15s;
+}
+.row .val.on{color:var(--ink);font-weight:500}
+.row .val.off{opacity:.32}
+.row .val.na{opacity:.25}
+
+.empty{padding:3rem 0;color:var(--ink-soft);font-size:.95rem}
+
+/* ---------- notas ---------- */
+.note{
+  margin-top:4rem;background:var(--navy-wash);border-left:2px solid var(--navy);
+  padding:1.5rem 1.6rem;
+}
+.note h3{font-size:.95rem;font-weight:600;margin-bottom:.5rem;letter-spacing:-.01em}
+.note p{font-size:.9rem;color:#41505f;max-width:62ch;line-height:1.55}
+
+footer{border-top:1px solid var(--rule);padding:2.5rem 0;background:var(--paper-2)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;
+  font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--ink-soft)}
+
+@media (max-width:720px){
+  .thead{grid-template-columns:1fr 100px}
+  .thead i.hide-sm{display:none}
+  .row{grid-template-columns:1fr 100px}
+  .row .val.off{display:none}
+  .hint{display:none}
+  .controls{position:static}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+  .row::before{transform:scaleY(1);opacity:0}
+  .row:hover::before{opacity:1}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap top-in">
+    <div class="mark">Tarifario <span>de la comarca</span> <span class="year">2026</span></div>
+    <nav>
+      <a href="#listado">Aranceles</a>
+      <a href="#como">Cómo usarlo</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Actualizado · <span class="fecha">Agosto 2026</span></p>
+    <h1>Cuánto cobrar, <em>sin adivinar</em>.</h1>
+    <p class="lede">Valores de referencia para presupuestar trabajo profesional. No son precios de lista: son un piso razonable para no cotizar por debajo del costo.</p>
+    <div class="meta">
+      <div><b id="count">0</b> aranceles publicados</div>
+      <div><b>3</b> escalas de cliente</div>
+      <div><b>ARS</b> moneda, sin IVA</div>
+    </div>
+  </div>
+</section>
+
+<div class="controls">
+  <div class="wrap controls-in">
+    <div class="field">
+      <label id="lbl-cliente">Tipo de cliente</label>
+      <div class="seg" role="group" aria-labelledby="lbl-cliente">
+        <button type="button" data-c="0" aria-pressed="false">A · Empresa</button>
+        <button type="button" data-c="1" aria-pressed="true">B · Pyme</button>
+        <button type="button" data-c="2" aria-pressed="false">C · Particular</button>
+      </div>
+    </div>
+    <div class="field">
+      <label for="q">Buscar servicio</label>
+      <input id="q" type="search" placeholder="logo, folleto, video…" autocomplete="off">
+    </div>
+    <div class="field">
+      <label for="adj">Ajuste %</label>
+      <input id="adj" type="number" value="0" step="1" min="-50" max="500">
+    </div>
+    <p class="hint">Los valores base son de la última actualización. Usá el ajuste para reexpresarlos.</p>
+  </div>
+</div>
+
+<main id="listado" class="wrap">
+  <div id="list"></div>
+
+  <section class="note" id="como">
+    <h3>Cómo leer estos valores</h3>
+    <p><strong>A</strong> es una empresa con estructura y área de marketing. <strong>B</strong> es una pyme o comercio con presupuesto acotado. <strong>C</strong> es un emprendedor, profesional independiente o institución sin fines de lucro. La diferencia no es la calidad del trabajo: es el alcance de uso, la cantidad de revisiones y el respaldo que la organización necesita. Cada proyecto se presupuesta según sus requerimientos; esto es una referencia, no una lista de precios cerrada.</p>
+    <p style="margin-top:.9rem">Los valores toman como base el tarifario nacional de referencia y le aplican un −20%, para reflejar la escala de trabajo fuera de los grandes centros. Si tu estructura de costos es distinta, ajustá con el campo de arriba.</p>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>Valores orientativos en pesos, sin IVA · Actualizado <span class="fecha">Agosto 2026</span></div>
+    <div>Base: <a href="https://tarifario.org">tarifario.org</a> ajustado −20% · <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.es">CC BY-SA 4.0</a></div>
+  </div>
+</footer>
+
+<script>
+/* ------------------------------------------------------------------
+   DATOS. Editá solo este bloque para mantener el tarifario.
+   [nombre, detalle, precioA, precioB, precioC]  — null = no aplica
+------------------------------------------------------------------- */
+const DATA = [
+  ["Identidad", [
+    ["Logo", "Logotipo, isotipo, imagotipo o isologo", null, null, 192251],
+    ["Diseño de marca básico", "Sin aplicaciones. Manual normativo básico", null, null, 123040],
+    ["Diseño de marca", "Manual normativo y hasta 5 aplicaciones", null, 384501, 253771],
+    ["Identidad corporativa", "Marca, aplicaciones y guía de uso", 933055, 631863, 328748],
+    ["Rediseño de identidad", "", 942027, 638271, 332593],
+    ["Naming", "Proceso de definición de nombre de marca", 276841, 196095, 111505],
+    ["Slogan o lema", "", 176871, 134575, 92280]
+  ]],
+  ["Papelería y editorial", [
+    ["Tarjetas personales", "", 73055, 55368, 32299],
+    ["Hojas membretadas", "", 73055, 55368, 32299],
+    ["Carpeta institucional", "", 123040, 94587, 57675],
+    ["Folleto frente y dorso", "", 155339, 110736, 76900],
+    ["Folleto tríptico", "", 279917, 188405, 108045],
+    ["Brochure 10 páginas", "", 384501, 284531, null],
+    ["Revista o catálogo 20 páginas", "", 674415, 492161, 250695]
+  ]],
+  ["Web", [
+    ["Sitio institucional", "Home y hasta 5 secciones. Sin programación", 478063, 362712, 269151],
+    ["Sitio responsivo", "Home y 5 secciones para 3 dispositivos", 838211, 722861, 599821],
+    ["Landing page", "Página única con formulario de contacto", 388345, 276841, 166873],
+    ["Implementación de WordPress", "Instalación, carga de datos y capacitación", 453711, 388345, 322981],
+    ["Formulario web", "Diseño y puesta en marcha", 73055, 59983, 46140],
+    ["Plantilla para mailing", "", 103815, 69211, 46140]
+  ]],
+  ["Redes sociales", [
+    ["Estrategia de comunicación", "Plan de contenidos y lineamientos", 192251, 165335, 138420],
+    ["Gestión mensual · 1 a 5 posteos", "", 130731, 110736, 92280],
+    ["Gestión mensual · 5 a 10 posteos", "", 192251, 165335, 138420],
+    ["Diseño de avatar", "", 30760, 25377, 17303],
+    ["Subida de videos", "", 36143, 26147, 21532]
+  ]],
+  ["Audiovisual", [
+    ["Edición de video", "Por minuto. Incluye retoque, sonido y render", 29223, 22301, 14611],
+    ["Filmación · 1 cámara, 2 horas", "", 237621, 176871, 117273],
+    ["Spot publicitario simple", "20 a 30 segundos, placas estáticas", 492161, 422951, 223011],
+    ["Sesión fotográfica en locación", "Hasta 2 horas, 1 cámara", 330671, 215320, 161491],
+    ["Foto de producto", "Por unidad", 55368, 39988, 27299]
+  ]],
+  ["Por hora", [
+    ["Diseño por hora", "", 29223, 21532, 14611],
+    ["Asesoramiento y supervisión", "", 29223, 21532, 14611],
+    ["Retoque y fotomontaje", "", 26915, 19225, 13843]
+  ]]
+];
+
+const fmt = new Intl.NumberFormat('es-AR', {maximumFractionDigits:0});
+const list = document.getElementById('list');
+const qEl = document.getElementById('q');
+const adjEl = document.getElementById('adj');
+let cliente = 1;
+
+/* Los valores de DATA estan congelados a la fecha base. El factor viene de
+   datos/factor.json, que el workflow recalcula cada trimestre segun el UVA.
+   Si el fetch falla, la pagina sigue funcionando con el factor neutro. */
+let factor = 1;
+
+async function cargarFactor(){
+  try{
+    const r = await fetch('datos/factor.json', {cache:'no-cache'});
+    if(!r.ok) throw new Error(r.status);
+    const f = await r.json();
+    if(typeof f.factor === 'number' && f.factor > 0) factor = f.factor;
+    if(f.etiqueta){
+      document.querySelectorAll('.fecha').forEach(el => el.textContent = f.etiqueta);
+    }
+  }catch(e){
+    console.warn('Sin factor actualizado, se usan los valores base.', e);
+  }
+  render();
+}
+
+document.getElementById('count').textContent =
+  DATA.reduce((n,[,items])=>n+items.length,0);
+
+function price(v){
+  if(v === null || v === 0) return null;
+  const adj = parseFloat(adjEl.value) || 0;
+  return Math.round(v * factor * (1 + adj/100));
+}
+
+function render(){
+  const q = qEl.value.trim().toLowerCase();
+  let html = '', hits = 0;
+
+  for(const [cat, items] of DATA){
+    const found = items.filter(it =>
+      !q || (it[0] + ' ' + it[1] + ' ' + cat).toLowerCase().includes(q)
+    );
+    if(!found.length) continue;
+    hits += found.length;
+
+    html += `<section class="cat"><h2>${cat}</h2>
+      <div class="thead">
+        <i style="text-align:left">Servicio</i>
+        <i class="${cliente===0?'sel':'hide-sm'}">Cliente A</i>
+        <i class="${cliente===1?'sel':'hide-sm'}">Cliente B</i>
+        <i class="${cliente===2?'sel':'hide-sm'}">Cliente C</i>
+      </div>`;
+
+    for(const it of found){
+      html += `<div class="row"><div class="name">${it[0]}${it[1] ? `<small>${it[1]}</small>` : ''}</div>`;
+      for(let i=0;i<3;i++){
+        const p = price(it[i+2]);
+        const state = p === null ? 'na' : (i === cliente ? 'on' : 'off');
+        html += `<div class="val ${state}">${p === null ? '—' : '$'+fmt.format(p)}</div>`;
+      }
+      html += `</div>`;
+    }
+    html += `</section>`;
+  }
+
+  list.innerHTML = hits ? html
+    : `<p class="empty">No hay aranceles que coincidan con “${qEl.value}”. Probá con una palabra más general, o escribinos y lo cotizamos.</p>`;
+}
+
+document.querySelectorAll('.seg button').forEach(b=>{
+  b.addEventListener('click',()=>{
+    cliente = +b.dataset.c;
+    document.querySelectorAll('.seg button').forEach(x=>
+      x.setAttribute('aria-pressed', x === b));
+    render();
+  });
+});
+qEl.addEventListener('input', render);
+adjEl.addEventListener('input', render);
+render();
+cargarFactor();
+</script>
+</body>
+</html>

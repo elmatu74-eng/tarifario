@@ -1,0 +1,54 @@
+name: Actualizar factor
+
+on:
+  schedule:
+    # El 1 de cada mes, 12:00 UTC (09:00 en Argentina).
+    # Mensual y no trimestral a proposito: GitHub apaga los workflows
+    # programados si el repo pasa 60 dias sin actividad.
+    - cron: '0 12 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  factor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Calcular factor
+        id: calc
+        run: node scripts/actualizar-factor.mjs
+
+      - name: Publicar
+        if: steps.calc.outputs.cambio == 'true' && steps.calc.outputs.salto != 'true'
+        run: |
+          git config user.name  "actualizador"
+          git config user.email "actions@github.com"
+          git add datos/
+          git commit -m "Factor ${{ steps.calc.outputs.factor }}"
+          git push
+
+      - name: Abrir pull request para revisar
+        if: steps.calc.outputs.salto == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          rama="factor/$(date +%Y-%m-%d)"
+          git config user.name  "actualizador"
+          git config user.email "actions@github.com"
+          git checkout -b "$rama"
+          git add datos/
+          git commit -m "Revisar: factor ${{ steps.calc.outputs.factor }}"
+          git push origin "$rama"
+          gh pr create \
+            --title "Revisar factor ${{ steps.calc.outputs.factor }}" \
+            --body "La variacion supera el 15% respecto de la corrida anterior. Verifica el valor UVA en la fuente antes de aprobar." \
+            --base "${{ github.ref_name }}" \
+            --head "$rama"

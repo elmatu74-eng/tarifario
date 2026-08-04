@@ -1,0 +1,6 @@
+{
+  "fecha_base": null,
+  "uva_base": null,
+  "nota": "Se completa solo en la primera corrida del workflow. Los precios de index.html estan expresados a esta fecha. No los toques a mano salvo que quieras redefinir la base: en ese caso, vacia estos dos campos y volve a correr el workflow.",
+  "fuente": "https://api.argentinadatos.com/v1/finanzas/indices/uva"
+}
