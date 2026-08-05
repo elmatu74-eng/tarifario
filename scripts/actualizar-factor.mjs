@@ -1,54 +1,87 @@
-name: Actualizar factor
+#!/usr/bin/env node
+/**
+ * Recalcula datos/factor.json a partir del indice UVA.
+ *
+ *   factor = UVA de hoy / UVA de la fecha base
+ *
+ * Los precios de index.html quedan congelados a la fecha base y se multiplican
+ * por este factor en el navegador. Este script nunca toca index.html.
+ *
+ * Salidas para el workflow (GITHUB_OUTPUT):
+ *   cambio=true|false   hubo variacion respecto del factor anterior
+ *   salto=true|false    la variacion supera el umbral y requiere revision humana
+ */
 
-on:
-  schedule:
-    # El 1 de cada mes, 12:00 UTC (09:00 en Argentina).
-    # Mensual y no trimestral a proposito: GitHub apaga los workflows
-    # programados si el repo pasa 60 dias sin actividad.
-    - cron: '0 12 1 * *'
-  workflow_dispatch:
+import { readFile, writeFile } from 'node:fs/promises';
 
-permissions:
-  contents: write
-  pull-requests: write
+const FUENTE  = 'https://api.argentinadatos.com/v1/finanzas/indices/uva';
+const UMBRAL  = 0.15;  // 15% de salto entre corridas dispara revision manual
+const BASE    = 'datos/base.json';
+const FACTOR  = 'datos/factor.json';
 
-jobs:
-  factor:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+const leer = async (p) => JSON.parse(await readFile(p, 'utf8'));
+const guardar = (p, o) => writeFile(p, JSON.stringify(o, null, 2) + '\n');
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+               'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 
-      - name: Calcular factor
-        id: calc
-        run: node scripts/actualizar-factor.mjs
+function etiqueta(fecha) {
+  const [a, m] = fecha.split('-');
+  return `${MESES[+m - 1]} ${a}`;
+}
 
-      - name: Publicar
-        if: steps.calc.outputs.cambio == 'true' && steps.calc.outputs.salto != 'true'
-        run: |
-          git config user.name  "actualizador"
-          git config user.email "actions@github.com"
-          git add datos/
-          git commit -m "Factor ${{ steps.calc.outputs.factor }}"
-          git push
+async function ultimoUVA() {
+  const r = await fetch(FUENTE, { headers: { accept: 'application/json' } });
+  if (!r.ok) throw new Error(`La fuente respondio ${r.status}`);
+  const serie = await r.json();
+  if (!Array.isArray(serie) || !serie.length) throw new Error('La serie vino vacia');
 
-      - name: Abrir pull request para revisar
-        if: steps.calc.outputs.salto == 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          rama="factor/$(date +%Y-%m-%d)"
-          git config user.name  "actualizador"
-          git config user.email "actions@github.com"
-          git checkout -b "$rama"
-          git add datos/
-          git commit -m "Revisar: factor ${{ steps.calc.outputs.factor }}"
-          git push origin "$rama"
-          gh pr create \
-            --title "Revisar factor ${{ steps.calc.outputs.factor }}" \
-            --body "La variacion supera el 15% respecto de la corrida anterior. Verifica el valor UVA en la fuente antes de aprobar." \
-            --base "${{ github.ref_name }}" \
-            --head "$rama"
+  const ultimo = serie[serie.length - 1];
+  const valor = Number(ultimo.valor);
+  if (!Number.isFinite(valor) || valor <= 0) {
+    throw new Error(`Valor UVA invalido: ${ultimo.valor}`);
+  }
+  return { valor, fecha: ultimo.fecha };
+}
+
+async function main() {
+  const base = await leer(BASE);
+  const previo = await leer(FACTOR).catch(() => ({ factor: 1 }));
+  const uva = await ultimoUVA();
+
+  // Primera corrida: la fecha de hoy queda como ancla y el factor arranca en 1.
+  if (base.uva_base == null) {
+    base.uva_base = uva.valor;
+    base.fecha_base = uva.fecha;
+    await guardar(BASE, base);
+    console.log(`Base fijada en ${uva.fecha} con UVA ${uva.valor}`);
+  }
+
+  const factor = Math.round((uva.valor / base.uva_base) * 10000) / 10000;
+  const variacion = Math.abs(factor / previo.factor - 1);
+
+  await guardar(FACTOR, {
+    factor,
+    etiqueta: etiqueta(uva.fecha),
+    uva: uva.valor,
+    uva_base: base.uva_base,
+    fecha_uva: uva.fecha,
+    actualizado: new Date().toISOString().slice(0, 10)
+  });
+
+  const cambio = factor !== previo.factor;
+  const salto = variacion > UMBRAL;
+
+  console.log(`factor ${previo.factor} -> ${factor} (${(variacion * 100).toFixed(1)}%)`);
+  if (salto) console.log('Supera el umbral: va por pull request.');
+
+  if (process.env.GITHUB_OUTPUT) {
+    await writeFile(process.env.GITHUB_OUTPUT,
+      `cambio=${cambio}\nsalto=${salto}\nfactor=${factor}\n`, { flag: 'a' });
+  }
+}
+
+main().catch(e => {
+  console.error('No se actualizo el factor:', e.message);
+  process.exit(1);
+});
