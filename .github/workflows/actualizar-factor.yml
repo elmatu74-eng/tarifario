@@ -20,18 +20,22 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
 
       - name: Calcular factor
         id: calc
         run: node scripts/actualizar-factor.mjs
 
       - name: Publicar
-        if: steps.calc.outputs.cambio == 'true' && steps.calc.outputs.salto != 'true'
+        if: steps.calc.outputs.salto != 'true'
         run: |
           git config user.name  "actualizador"
           git config user.email "actions@github.com"
           git add datos/
+          if git diff --cached --quiet; then
+            echo "Sin cambios que publicar."
+            exit 0
+          fi
           git commit -m "Factor ${{ steps.calc.outputs.factor }}"
           git push
 
